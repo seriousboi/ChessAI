@@ -20,13 +20,16 @@ def getBestMoveMM(board,color,heuristic,depth):
 
         board.pop()
 
+    for move in bestMoves:
+        print(move)
+
     return choice(bestMoves)
 
 
 
 def maxMin(board,color,heuristic,depth):
 
-    if depth == 0:
+    if depth == 0 or board.is_game_over():
         return heuristic(board,color)
 
     best = -160
@@ -44,7 +47,7 @@ def maxMin(board,color,heuristic,depth):
 
 def minMax(board,color,heuristic,depth):
 
-    if depth == 0:
+    if depth == 0 or board.is_game_over():
         return heuristic(board,color)
 
     worst = 160

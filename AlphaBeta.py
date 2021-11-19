@@ -11,7 +11,7 @@ def getBestMoveAB(board,color,heuristic,depth):
     for move in board.generate_legal_moves():
 
         board.push(move)
-        moveScore = getMinAB(board,color,heuristic,depth,alpha,beta)
+        moveScore = getMinAB(board, color,heuristic,depth,alpha,beta)
 
         if  moveScore > alpha:
             alpha = moveScore
