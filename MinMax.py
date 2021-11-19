@@ -2,7 +2,7 @@ from random import choice
 
 
 
-def getBestMove(board,color,heuristic,depth):
+def getBestMoveMM(board,color,heuristic,depth):
 
     bestMoves = []
     bestScore = -160

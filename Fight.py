@@ -39,7 +39,7 @@ def userVSminmax(board,minMaxHeuristic,minMaxDepth):
 
             print("----------")
             print("AI turn")
-            minMax2Move = getBestMove(board,chess.BLACK,minMaxHeuristic,minMaxDepth)
+            minMax2Move = getBestMoveMM(board,chess.BLACK,minMaxHeuristic,minMaxDepth)
             board.push(minMax2Move)
             print(board)
 
@@ -48,23 +48,23 @@ def userVSminmax(board,minMaxHeuristic,minMaxDepth):
     return board
 
 
-def minmaxVSminmax(board,minMaxHeuristic1,minMaxHeuristic2,minMaxDepth1,minMaxDepth2):
+def aiVSai(board,ai1,ai2,heuristic1,heuristic2,depth1,depth2):
     print(board)
 
     while not board.is_game_over():
 
         print("----------")
         print("White to move")
-        minMax1Move = getBestMove(board,chess.WHITE,minMaxHeuristic1,minMaxDepth1)
-        board.push(minMax1Move)
+        ai1Move = ai1(board,chess.WHITE,heuristic1,depth1)
+        board.push(ai1Move)
         print(board)
 
         if not board.is_game_over():
 
             print("----------")
             print("Black to move")
-            minMax2Move = getBestMove(board,chess.BLACK,minMaxHeuristic2,minMaxDepth2)
-            board.push(minMax2Move)
+            ai2Move = ai2(board,chess.BLACK,heuristic2,depth2)
+            board.push(ai2Move)
             print(board)
 
     print(board.result())
@@ -73,14 +73,14 @@ def minmaxVSminmax(board,minMaxHeuristic1,minMaxHeuristic2,minMaxDepth1,minMaxDe
 
 
 
-def minmaxVSrandom(board,minMaxHeuristic,minMaxDepth):
+def aiVSrandom(board,ai,heuristic,depth):
     print(board)
 
     while not board.is_game_over():
 
         print("White to move")
-        minMaxMove = getBestMove(board,chess.WHITE,minMaxHeuristic,minMaxDepth)
-        board.push(minMaxMove)
+        aiMove = ai(board,chess.WHITE,heuristic,depth)
+        board.push(aiMove)
 
         print(board)
 
