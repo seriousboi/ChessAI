@@ -5,22 +5,12 @@ import chess
 def basicHeuristic(board,color):
 
     if board.is_game_over():
-        print(board)
-        print(board.is_checkmate())
-        print(board.is_stalemate())
-        print(board.is_insufficient_material())
-        print()
-
-        if board.is_stalemate() or board.is_insufficient_material():
-            return 0
-
         if board.outcome().winner == color:
             return 160
-
-        else:
+        elif board.outcome().winner == (not color):
             return -160
-
-
+        elif board.outcome().winner == None:
+            return 0
 
     map = board.piece_map()
     score = 0

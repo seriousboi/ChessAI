@@ -4,7 +4,7 @@ from Heuristics import *
 from MinMax import *
 
 
-def userVSminmax(board,minMaxHeuristic,minMaxDepth):
+def userVSai(board,ai,heuristic,depth):
     print(board)
 
     while not board.is_game_over():
@@ -39,11 +39,12 @@ def userVSminmax(board,minMaxHeuristic,minMaxDepth):
 
             print("----------")
             print("AI turn")
-            minMax2Move = getBestMoveMM(board,chess.BLACK,minMaxHeuristic,minMaxDepth)
-            board.push(minMax2Move)
+            aiMove = ai(board,chess.BLACK,heuristic,depth)
+            board.push(aiMove)
             print(board)
 
     print(board.result())
+    print(board.outcome().termination)
 
     return board
 
@@ -68,6 +69,7 @@ def aiVSai(board,ai1,ai2,heuristic1,heuristic2,depth1,depth2):
             print(board)
 
     print(board.result())
+    print(board.outcome().termination)
 
     return board
 
@@ -92,6 +94,7 @@ def aiVSrandom(board,ai,heuristic,depth):
             print("----------")
             print(board)
     print(board.result())
+    print(board.outcome().termination)
 
     return board
 

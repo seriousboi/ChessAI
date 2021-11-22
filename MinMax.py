@@ -5,7 +5,7 @@ from random import choice
 def getBestMoveMM(board,color,heuristic,depth):
 
     bestMoves = []
-    bestScore = -160
+    bestScore = -161
 
     for move in board.generate_legal_moves():
 
@@ -20,9 +20,6 @@ def getBestMoveMM(board,color,heuristic,depth):
 
         board.pop()
 
-    for move in bestMoves:
-        print(move)
-
     return choice(bestMoves)
 
 
@@ -32,7 +29,7 @@ def maxMin(board,color,heuristic,depth):
     if depth == 0 or board.is_game_over():
         return heuristic(board,color)
 
-    best = -160
+    best = -161
     for move in board.generate_legal_moves():
 
         board.push(move)
@@ -50,7 +47,7 @@ def minMax(board,color,heuristic,depth):
     if depth == 0 or board.is_game_over():
         return heuristic(board,color)
 
-    worst = 160
+    worst = 161
     for move in board.generate_legal_moves():
 
         board.push(move)
