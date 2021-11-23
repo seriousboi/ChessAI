@@ -1,10 +1,10 @@
+from TimedAI import *
 import chess
 from random import choice
-from Heuristics import *
-from MinMax import *
 
 
-def userVSai(board,ai,heuristic,depth):
+
+def userVSai(board,ai,heuristic,maxDuration):
     print(board)
 
     while not board.is_game_over():
@@ -39,7 +39,7 @@ def userVSai(board,ai,heuristic,depth):
 
             print("----------")
             print("AI turn")
-            aiMove = ai(board,chess.BLACK,heuristic,depth)
+            aiMove = getBestMoveTime(ai,board,chess.BLACK,heuristic,maxDuration)
             board.push(aiMove)
             print(board)
 

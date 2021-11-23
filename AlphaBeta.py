@@ -1,4 +1,4 @@
-import random
+from random import shuffle
 
 
 
@@ -9,7 +9,7 @@ def getBestMoveAB(board,color,heuristic,depth):
     moves = []
     for move in board.generate_legal_moves():
         moves += [move]
-    random.shuffle(moves)
+    shuffle(moves)
 
     for move in moves:
 
