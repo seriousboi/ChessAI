@@ -1,6 +1,6 @@
 from TimedAI import *
-import chess
 from random import choice
+import chess
 
 
 
