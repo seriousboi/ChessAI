@@ -49,14 +49,15 @@ def userVSai(board,ai,heuristic,maxDuration):
     return board
 
 
-def aiVSai(board,ai1,ai2,heuristic1,heuristic2,depth1,depth2):
+
+def aiVSai(board,ai1,ai2,heuristic1,heuristic2,maxDuration1,maxDuration2):
     print(board)
 
     while not board.is_game_over():
 
         print("----------")
         print("White to move")
-        ai1Move = ai1(board,chess.WHITE,heuristic1,depth1)
+        ai1Move = getBestMoveTime(ai1,board,chess.WHITE,heuristic1,maxDuration1)
         board.push(ai1Move)
         print(board)
 
@@ -64,7 +65,7 @@ def aiVSai(board,ai1,ai2,heuristic1,heuristic2,depth1,depth2):
 
             print("----------")
             print("Black to move")
-            ai2Move = ai2(board,chess.BLACK,heuristic2,depth2)
+            ai2Move = getBestMoveTime(ai2,board,chess.BLACK,heuristic2,maxDuration2)
             board.push(ai2Move)
             print(board)
 
