@@ -1,0 +1,4 @@
+Board FEN:
+4kb2/r4p1p/2n5/pp2P2P/5P2/2Np4/PB6/1R1K4 b KQkq - 0 1
+Its black's turn:
+1
