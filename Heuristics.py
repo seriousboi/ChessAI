@@ -34,7 +34,7 @@ def betterHeuristic(board,color):
             value = 3.25 #+ getCentralPieceBonus(square)
 
         elif piece.piece_type == chess.ROOK:
-            value = 5 #+ getOpenFileBonus(board,square) #trop couteux
+            value = 5 + getRookSquareBonus(square,color)
 
         elif piece.piece_type == chess.QUEEN:
             value = 9
@@ -55,17 +55,24 @@ def betterHeuristic(board,color):
 
         score += value
 
+    #on favorise un roi protégé si la reine est sur le plateau
     #on favorise un roi central si la reine enemie n'est plus sur le plateau
-    if not enemyHasQueen:
-        score += getCentralPieceBonus(kingSquare)
-    if not hasQueen:
-        score -= getCentralPieceBonus(enemyKingSquare)
+
+    if enemyHasQueen:
+        score += getCetralKingSquareMalus(kingSquare,color)
+    else:
+        score += getCentralPieceBonus(kingSquare)*2
+
+    if hasQueen:
+        score -= getCetralKingSquareMalus(enemyKingSquare,not color)
+    else:
+        score -= getCentralPieceBonus(enemyKingSquare)*2
 
     # /!\ mauvais, incite principalement a ne pas castle
     if board.has_castling_rights(color):
-        score += 0.5
+        score += 0.2
     if  board.has_castling_rights(not color):
-        score -= 0.5
+        score -= 0.2
 
     return score
 
@@ -93,6 +100,7 @@ squares = [
 
 
 #une tour est favorisée sur une colonne libre
+#trop couteux
 def getOpenFileBonus(board,square):
     global squares
     file = chess.square_file(square)
@@ -110,6 +118,28 @@ def getOpenFileBonus(board,square):
         return 0.75
     elif obstructingPawns == 0:
         return 1.5
+
+
+
+#une tour est favorisée sur une colonne centrale
+def getRookSquareBonus(square,color):
+    fileBonus = (1 - 0.5*(abs(3.5-chess.square_file(square))-0.5))/2
+    return fileBonus
+
+
+
+#analogue au bonus central
+fileMaluses = [-0.25,-0,-0.5,-1,-1,-0.5,-0,-0.25]
+def getCetralKingSquareMalus(square,color):
+    global fileMaluses
+    if color: #blanc
+        rankMalus = -(chess.square_rank(square)/14)
+    else: #noir
+        rankMalus = -((7-chess.square_rank(square))/14)
+
+    fileMalus = fileMaluses[chess.square_file(square)]
+    return rankMalus + fileMalus #négatif car c'est un malus
+
 
 
 whitePawnBonus = [0,0,1/4,2/4,3/4,1,4,0]
