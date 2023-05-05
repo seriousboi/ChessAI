@@ -8,7 +8,7 @@ import chess
 def giveAImove():
     FEN, color = getInput()
     board = chess.Board(FEN)
-    move = getBestMoveTime(ABtimed,board,color,basicHeuristic,4)
+    move = getBestMoveTime(ABtimed,board,color,betterHeuristic,5)
     giveOuput(move)
 
 

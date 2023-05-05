@@ -25,16 +25,16 @@ def betterHeuristic(board,color):
         piece = map[square]
 
         if piece.piece_type == chess.PAWN:
-            value = 1 + getAdvancedPawnBonus(piece.color,square)
+            value = 1 + getCentralPieceBonus(square) #getAdvancedPawnBonus(piece.color,square)
 
         elif piece.piece_type == chess.KNIGHT:
             value = 3 + getCentralPieceBonus(square)
 
         elif piece.piece_type == chess.BISHOP:
-            value = 3.25 + getCentralPieceBonus(square)
+            value = 3.25 #+ getCentralPieceBonus(square)
 
         elif piece.piece_type == chess.ROOK:
-            value = 5 + getOpenFileBonus(board,square)
+            value = 5 #+ getOpenFileBonus(board,square) #trop couteux
 
         elif piece.piece_type == chess.QUEEN:
             value = 9
@@ -61,19 +61,20 @@ def betterHeuristic(board,color):
     if not hasQueen:
         score -= getCentralPieceBonus(enemyKingSquare)
 
+    # /!\ mauvais, incite principalement a ne pas castle
     if board.has_castling_rights(color):
-        score += 1
+        score += 0.5
     if  board.has_castling_rights(not color):
-        score -= 1
+        score -= 0.5
 
     return score
 
 
 
-#+1 au centre, +0.5 autour du centre, +0 à une case du bord, -0.5 au bord
+#+1 au centre, +0.5 autour du centre, +0 à une case du bord, -0.5 au bord (*1/2)
 def getCentralPieceBonus(square):
-    fileBonus = 1 - 0.5*(abs(3.5-chess.square_file(square))-0.5)
-    rankBonus = 1 - 0.5*(abs(3.5-chess.square_rank(square))-0.5)
+    fileBonus = (1 - 0.5*(abs(3.5-chess.square_file(square))-0.5))/2
+    rankBonus = (1 - 0.5*(abs(3.5-chess.square_rank(square))-0.5))/2
     return min(fileBonus,rankBonus)
 
 
