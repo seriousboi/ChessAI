@@ -58,15 +58,17 @@ def betterHeuristic(board,color):
     #on favorise un roi protégé si la reine est sur le plateau
     #on favorise un roi central si la reine enemie n'est plus sur le plateau
 
-    if enemyHasQueen:
-        score += getCetralKingSquareMalus(kingSquare,color)
-    else:
-        score += getCentralPieceBonus(kingSquare)*2
+    if kingSquare != None:
+        if enemyHasQueen:
+            score += getCetralKingSquareMalus(kingSquare,color)
+        else:
+            score += getCentralPieceBonus(kingSquare)*2
 
-    if hasQueen:
-        score -= getCetralKingSquareMalus(enemyKingSquare,not color)
-    else:
-        score -= getCentralPieceBonus(enemyKingSquare)*2
+    if enemyKingSquare != None:
+        if hasQueen:
+            score -= getCetralKingSquareMalus(enemyKingSquare,not color)
+        else:
+            score -= getCentralPieceBonus(enemyKingSquare)*2
 
     # /!\ mauvais, incite principalement a ne pas castle
     if board.has_castling_rights(color):
