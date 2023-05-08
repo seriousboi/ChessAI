@@ -5,10 +5,15 @@ import chess
 
 
 
+AItime = 3
+
+
+
 def giveAImove():
+    global AItime
     FEN, color = getInput()
     board = chess.Board(FEN)
-    move = getBestMoveTime(ABtimed,board,color,betterHeuristic,5)
+    move = getBestMoveTime(ABtimed,board,color,betterHeuristic,AItime)
     giveOuput(move)
 
 

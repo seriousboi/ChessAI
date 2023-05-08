@@ -20,7 +20,7 @@ def getBestMoveTime(ai,board,color,heuristic,maxDuration):
         #on vérifie si le l'ia n'a pas été interrompue
         if stillTime(startTime,maxDuration):
             bestMove = nextMove
+            depth += 1
 
-        depth += 1
-
+    print("Depth",depth)
     return bestMove
