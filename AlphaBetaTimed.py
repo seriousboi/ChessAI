@@ -5,12 +5,12 @@ from time import time
 
 def stillTime(startTime,maxDuration):
     return time() - startTime < maxDuration
-    
+
 
 
 def ABtimed(board,color,heuristic,depth,startTime,maxDuration):
-    alpha = -161
-    beta = 161
+    alpha = -1000000
+    beta = 1000000
 
     moves = []
     for move in board.generate_legal_moves():

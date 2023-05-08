@@ -2,13 +2,12 @@ import chess
 
 
 
-
 def betterHeuristic(board,color):
     if board.is_game_over():
         if board.outcome().winner == color:
-            return 160
+            return (1000000 - (board.fullmove_number))
         elif board.outcome().winner == (not color):
-            return -160
+            return -(1000000 - (board.fullmove_number))
         elif board.outcome().winner == None:
             return 0
 
@@ -25,16 +24,16 @@ def betterHeuristic(board,color):
         piece = map[square]
 
         if piece.piece_type == chess.PAWN:
-            value = 1 + getCentralPieceBonus(square) #getAdvancedPawnBonus(piece.color,square)
+            value = 1 + getPawnBonus(square,color)/2
 
         elif piece.piece_type == chess.KNIGHT:
             value = 3 + getCentralPieceBonus(square)
 
         elif piece.piece_type == chess.BISHOP:
-            value = 3.25 #+ getCentralPieceBonus(square)
+            value = 3.25 + getCentralPieceBonus(square)
 
         elif piece.piece_type == chess.ROOK:
-            value = 5 + getRookSquareBonus(square,color)
+            value = 5 + getOpenFileBonus(board,square)
 
         elif piece.piece_type == chess.QUEEN:
             value = 9
@@ -57,34 +56,61 @@ def betterHeuristic(board,color):
 
     #on favorise un roi protégé si la reine est sur le plateau
     #on favorise un roi central si la reine enemie n'est plus sur le plateau
-
     if kingSquare != None:
         if enemyHasQueen:
             score += getCetralKingSquareMalus(kingSquare,color)
         else:
-            score += getCentralPieceBonus(kingSquare)*2
+            score += getCentralPieceBonus(kingSquare)
 
     if enemyKingSquare != None:
         if hasQueen:
             score -= getCetralKingSquareMalus(enemyKingSquare,not color)
         else:
-            score -= getCentralPieceBonus(enemyKingSquare)*2
-
-    # /!\ mauvais, incite principalement a ne pas castle
-    if board.has_castling_rights(color):
-        score += 0.2
-    if  board.has_castling_rights(not color):
-        score -= 0.2
+            score -= getCentralPieceBonus(enemyKingSquare)
 
     return score
 
 
 
-#+1 au centre, +0.5 autour du centre, +0 à une case du bord, -0.5 au bord (*1/2)
+pawnBonusSquares =[
+[0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00],
+[0.00,0.00,0.00,0.00,0.00,0.00,0.00,0.00],
+[0.50,0.50,0.00,0.25,0.25,0.00,0.50,0.50],
+[0.51,0.51,0.75,0.90,0.90,0.75,0.51,0.51],
+[0.52,0.52,0.76,0.91,0.91,0.76,0.52,0.52],
+[0.53,0.53,0.77,0.92,0.92,0.77,0.53,0.53],
+[0.54,0.54,0.78,0.93,0.93,0.78,0.54,0.54],
+[1.00,1.00,1.00,1.00,1.00,1.00,1.00,1.00],]
+def getPawnBonus(square,color):
+    global pawnBonusSquares
+    if color: #blanc
+        return pawnBonusSquares[chess.square_rank(square)][chess.square_file(square)]
+    else: #noir
+        return pawnBonusSquares[7-chess.square_rank(square)][chess.square_file(square)]
+
+
+
+#+1 au centre, +0.66 autour du centre, +33 à une case du bord, 0.0 au bord
+distanceBonus = [1,0.75,0.5,0]
 def getCentralPieceBonus(square):
-    fileBonus = (1 - 0.5*(abs(3.5-chess.square_file(square))-0.5))/2
-    rankBonus = (1 - 0.5*(abs(3.5-chess.square_rank(square))-0.5))/2
+    global distanceBonus
+    fileBonus = distanceBonus[int(abs(3.5-chess.square_file(square))-0.5)]
+    rankBonus = distanceBonus[int(abs(3.5-chess.square_rank(square))-0.5)]
     return min(fileBonus,rankBonus)
+
+
+
+#analogue au bonus central, entre 0 et -1
+fileMaluses = [-0,-0,-0.25,-0.5,-0.5,-0.25,-0,-0]
+def getCetralKingSquareMalus(square,color):
+    global fileMaluses
+    if color: #blanc
+        rankMalus = -(chess.square_rank(square)/14)
+    else: #noir
+        rankMalus = -((7-chess.square_rank(square))/14)
+
+    fileMalus = fileMaluses[chess.square_file(square)]
+    return rankMalus + fileMalus #négatif car c'est un malus
 
 
 
@@ -119,28 +145,7 @@ def getOpenFileBonus(board,square):
     elif obstructingPawns == 1:
         return 0.75
     elif obstructingPawns == 0:
-        return 1.5
-
-
-
-#une tour est favorisée sur une colonne centrale
-def getRookSquareBonus(square,color):
-    fileBonus = (1 - 0.5*(abs(3.5-chess.square_file(square))-0.5))/2
-    return fileBonus
-
-
-
-#analogue au bonus central
-fileMaluses = [-0.25,-0,-0.5,-1,-1,-0.5,-0,-0.25]
-def getCetralKingSquareMalus(square,color):
-    global fileMaluses
-    if color: #blanc
-        rankMalus = -(chess.square_rank(square)/14)
-    else: #noir
-        rankMalus = -((7-chess.square_rank(square))/14)
-
-    fileMalus = fileMaluses[chess.square_file(square)]
-    return rankMalus + fileMalus #négatif car c'est un malus
+        return 1
 
 
 
